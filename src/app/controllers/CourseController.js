@@ -37,7 +37,7 @@ class CourseController {
         const formData = req.body;
         formData.image = `https://img.youtube.com/vi/${formData.videoId}/sddefault.jpg`;
         const course = new Course(formData)
-        course.save().then(() => res.redirect('/')).catch(error => { })
+        course.save().then(() => res.redirect('/')).catch(next)
     }
 
     // [DELETE] /courses/:id
