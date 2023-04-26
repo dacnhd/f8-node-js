@@ -1,7 +1,7 @@
 <div class="mt-4">
     <div>
-        <h3>My courses</h3>
-        <a href="/me/trash/courses">Trash can</a>
+        <h3>Trash courses</h3>
+        <a href="/me/stored/courses">My courses</a>
     </div>
     <table class="table mt-4">
         <thead>
@@ -20,16 +20,16 @@
                 <td>{{this.description}}</td>
                 <td>{{this.createdAt}}</td>
                 <td>
-                    <a href="/courses/{{this._id}}/edit" class="btn btn-link">Edit</a>
+                    <a href="" class="btn btn-link btn-restore" data-id="{{this._id}}">Restore</a>
                     <a href="" class="btn btn-link" data-id="{{this._id}}" data-toggle="modal"
-                        data-target="#deleteModal">Delete</a>
+                        data-target="#deleteModal">Force deleted</a>
                 </td>
             </tr>
             {{else}}
             <tr>
                 <td colspan="5" class="text-center">
-                    You have not posted any courses yet.
-                    <a href="/courses/create">Create course</a>
+                    Empty trash can.
+                    <a href="/me/stored/courses">My courses</a>
                 </td>
             </tr>
             {{/each}}
@@ -43,31 +43,32 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete course?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Force delete course?</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure?
+                This action cannot be undone. Are you sure?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cance</button>
-                <button type="button" id="btn-delete-course" class="btn btn-danger">Delete</button>
+                <button type="button" id="btn-delete-course" class="btn btn-danger">Force delete</button>
             </div>
         </div>
     </div>
 </div>
 
-{{!-- Delete hidden form --}}
-<form id="delete-course-form" method="POST">
-</form>
+<form id="delete-course-form" method="POST"></form>
+<form id="restore-course-form" method="POST"></form>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         let counseId
         const deletedForm = document.forms['delete-course-form']
+        const restoreForm = document.forms['restore-course-form']
         const btnDeleteCourse = $('#btn-delete-course')
+        const btnRestore = $('.btn-restore');
 
         $('#deleteModal').on('show.bs.modal', (event) => {
             const button = $(event.relatedTarget)
@@ -75,8 +76,16 @@
         })
 
         btnDeleteCourse.on('click', () => {
-            deletedForm.action = '/courses/' + counseId + '?_method=DELETE'
+            deletedForm.action = '/courses/' + counseId + '/force?_method=DELETE'
             deletedForm.submit()
+        })
+
+        btnRestore.click(function (e) {
+            e.preventDefault();
+            counseId = $(this).data('id')
+            console.log(counseId)
+            restoreForm.action = '/courses/' + counseId + '/restore?_method=PATCH'
+            restoreForm.submit()
         })
     })
 </script>
