@@ -20,6 +20,16 @@ app.use(express.json());
 
 app.use(methodOverride('_method'));
 
+app.use(checkVe)
+
+function checkVe(req, res, next) {
+    if (['vethuong', 'VIP'].includes(req.query.ve)) {
+        req.face = 'ư ư ư!'
+        return next()
+    }
+    res.status(403).json({ message: 'access denied' })
+}
+
 // app.use(morgan('combined'))
 
 app.engine(
