@@ -6,13 +6,6 @@
         {{/if}}
 
         <div class="mt-4 d-flex align-items-center">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
-                <label class="form-check-label" for="checkbox-all">
-                    Check all
-                </label>
-            </div>
-
             <select class="form-control form-control-sm checkbox-select-all-options" name="action" required>
                 <option value="">--- Select option ---</option>
                 <option value="delete">Delete</option>
@@ -24,8 +17,16 @@
     <table class="table mt-4">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                <td scope="col">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+                    </div>
+                </td>
                 <th scope="col">STT</th>
+                <th scope="col">
+                    Id
+                    {{{sortable '_id' _sort}}}
+                </th>
                 <th scope="col">
                     Name
                     {{{sortable 'name' _sort}}}
@@ -49,6 +50,7 @@
                     </div>
                 </td>
                 <th scope="row">{{sum @index 1}}</th>
+                <td>{{this._id}}</td>
                 <td>{{this.name}}</td>
                 <td>{{this.description}}</td>
                 <td>{{this.createdAt}}</td>
